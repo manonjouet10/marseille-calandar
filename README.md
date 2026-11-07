@@ -11,14 +11,26 @@ python3 server.py
 
 puis ouvrir <http://localhost:8000>
 
+Par défaut le serveur écoute en local (`127.0.0.1:8000`). Pour le rendre accessible aux
+autres (réseau local, petite machine perso, etc.) :
+
+```bash
+HOST=0.0.0.0 PORT=8000 python3 server.py
+```
+
 La base `data/app.db` est créée automatiquement au premier lancement, puis seedée avec :
 
-- **10 lieux réels** de Marseille (Espace Julien, La Mürisserie, Théâtre du Carré Rond,
-  Strapontin, Café-Théâtre du Tûtard, Théâtre Marie-Jeanne, Casa Consolat, KLAP,
-  Friche la Belle de Mai, Couvent Levat) avec adresse et minutes à vélo depuis le Cours Julien ;
-- **56 événements** (nov. 2026 → fév. 2027) : DVM des Presque (presque derniers vendredis
-  du mois, 20h30, Théâtre Marie-Jeanne), matchs d'impro LIPHO au Tûtard, cabaret d'impro
-  Le Bruit Qui Court au Strapontin, programmation de l'Espace Julien et de la Friche…
+- **13 lieux réels** de Marseille, centrés sur le Cours Julien / La Plaine et à moins de
+  20 min à vélo (Espace Julien, La Mûrisserie, Le Molotov, Théâtre Marie-Jeanne, Théâtre
+  du Carré Rond, Le Non-Lieu, Café-Théâtre du Tûtard, Casa Consolat, Strapontin, Friche la
+  Belle de Mai, L'Embobineuse, Couvent Levat, KLAP – Maison pour la danse), avec adresse et
+  minutes à vélo depuis le Cours Julien ;
+- **60 événements** (nov. 2026 → fév. 2027) : les vrais rendez-vous récurrents — DVM des
+  Presque au Théâtre Marie-Jeanne (derniers vendredis du mois : 27 nov., 18 déc. exception,
+  29 janv., 26 fév., 20h30), matchs d'impro LIPHO au Tûtard, cabaret d'impro Le Bruit Qui
+  Court au Strapontin — plus des dates réelles glanées (Micrographia le 17/11 à la Friche,
+  soirée de soutien le 7/11 à l'Embobineuse) et des programmations génériques à remplacer par
+  les vraies annonces.
 
 ## API REST
 
@@ -38,7 +50,7 @@ La base `data/app.db` est créée automatiquement au premier lancement, puis see
 
 - Calendrier du mois (pastilles par jour, clic = défilement vers le jour) + liste détaillée ;
 - Filtres : type, lieu, temps max à vélo depuis le Cours Julien ;
-- RSVP « Disponible » / « Intéressé·e » par prénom (prénom conservé en `localStorage`, clic à nouveau pour retirer) ;
+- RSVP « ✅ Disponible » / « 🤏 Intéressé·e » par prénom (prénom conservé en `localStorage`, clic à nouveau pour retirer) ;
 - Ajout et suppression d'événements.
 
 ## Structure

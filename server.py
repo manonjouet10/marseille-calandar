@@ -13,8 +13,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 DB_PATH = os.path.join(DATA_DIR, "app.db")
 STATIC_DIR = os.path.join(BASE_DIR, "static")
-HOST = "127.0.0.1"
-PORT = 8000
+HOST = os.environ.get("HOST", "127.0.0.1")
+PORT = int(os.environ.get("PORT", "8000"))
 
 EVENT_TYPES = [
     "concert", "théâtre", "impro", "cabaret", "humour",
@@ -25,15 +25,18 @@ RSVP_STATUSES = ("available", "interested")
 # Lieux réels de Marseille : adresse + minutes à vélo depuis le Cours Julien.
 VENUES = [
     ("Espace Julien", "39 cours Julien, 13006 Marseille", 0),
-    ("La Mürisserie", "44 cours Julien, 13006 Marseille", 2),
-    ("Théâtre du Carré Rond", "23 rue des Trois Rois, 13006 Marseille", 4),
-    ("Strapontin", "111 rue de l'Olivier, 13005 Marseille", 10),
-    ("Café-Théâtre du Tûtard", "33 rue Ferrari, 13005 Marseille", 7),
+    ("La Mûrisserie", "44 cours Julien, 13006 Marseille", 2),
+    ("Le Molotov", "3 place Paul Cézanne, 13006 Marseille", 3),
     ("Théâtre Marie-Jeanne", "56 rue Berlioz, 13006 Marseille", 3),
+    ("Théâtre du Carré Rond", "23 rue des Trois Rois, 13006 Marseille", 4),
+    ("Le Non-Lieu", "67 rue de la Palud, 13006 Marseille", 7),
+    ("Café-Théâtre du Tûtard", "33 rue Ferrari, 13005 Marseille", 7),
     ("Casa Consolat", "1 rue Consolat, 13001 Marseille", 9),
-    ("KLAP – Maison pour la danse", "5 avenue Rostand, 13003 Marseille", 13),
+    ("Strapontin", "111 rue de l'Olivier, 13005 Marseille", 10),
     ("Friche la Belle de Mai", "41 rue Jobin, 13003 Marseille", 11),
+    ("L'Embobineuse", "11 boulevard Bouès, 13003 Marseille", 12),
     ("Couvent Levat", "52 rue Levat, 13003 Marseille", 12),
+    ("KLAP – Maison pour la danse", "5 avenue Rostand, 13003 Marseille", 13),
 ]
 
 SCHEMA = """
@@ -68,10 +71,11 @@ def build_seed_events():
     def add(title, type_, venue, date, time, description):
         events.append((title, type_, venue, date, time, description))
 
-    dvm_title = "DVM – Les Presque (presque dernier vendredi du mois)"
+    dvm_title = "DVM – Dernier Vendredi du Mois – Les Presque"
     dvm_desc = ("Rendez-vous d'improvisation des Presque au Théâtre Marie-Jeanne : "
-                "chaque DVM est unique, guidé par les suggestions du public.")
-    for d in ("2026-11-20", "2026-12-18", "2027-01-22", "2027-02-19"):
+                "chaque DVM est unique, guidé par les suggestions du public. "
+                "Exception en décembre : le vendredi 18 déc. au lieu du 25.")
+    for d in ("2026-11-27", "2026-12-18", "2027-01-29", "2027-02-26"):
         add(dvm_title, "impro", "Théâtre Marie-Jeanne", d, "20:30", dvm_desc)
 
     lipho_title = "Match d'impro – LIPHO au Tûtard"
@@ -86,7 +90,7 @@ def build_seed_events():
     cab_title = "Cabaret d'impro – Le Bruit Qui Court"
     cab_desc = ("Cabaret d'improvisation théâtrale par le collectif Le Bruit Qui Court au "
                 "Strapontin. Plein tarif 8 €, réduit 5 €.")
-    for d in ("2026-11-07", "2026-11-21", "2026-12-05", "2026-12-19",
+    for d in ("2026-11-13", "2026-11-21", "2026-12-05", "2026-12-19",
               "2027-01-09", "2027-01-23", "2027-02-06", "2027-02-20"):
         add(cab_title, "cabaret", "Strapontin", d, "20:30", cab_desc)
 
@@ -124,9 +128,9 @@ def build_seed_events():
         "2026-11-11", "20:30", "La compagnie du Carré Rond revisite Sébastien Thiery. 49 places.")
     add("Concert chanson – voix & guitare", "concert", "Théâtre du Carré Rond",
         "2027-01-20", "20:30", "Soirée chanson française au Carré Rond.")
-    add("Concert folk – duo marseillais", "concert", "La Mürisserie",
-        "2026-12-12", "21:00", "Concert intimiste au bistrot de la Mürisserie.")
-    add("Scène ouverte – poésie & musique", "scène ouverte", "La Mürisserie",
+    add("Concert folk – duo marseillais", "concert", "La Mûrisserie",
+        "2026-12-12", "21:00", "Concert intimiste au bistrot de la Mûrisserie.")
+    add("Scène ouverte – poésie & musique", "scène ouverte", "La Mûrisserie",
         "2027-02-27", "21:00", "Scène ouverte : 10 minutes par artiste, inscription sur place.")
     add("Concert jazz – cantine de la Casa", "concert", "Casa Consolat",
         "2026-11-18", "19:00", "Jazz à la cantine associative de la Casa Consolat, repas possible sur place.")
@@ -134,6 +138,16 @@ def build_seed_events():
         "2027-01-30", "20:30", "La compagnie Kelemenis & cie présente sa nouvelle création au KLAP.")
     add("Vernissage – expo des résident·es du Couvent", "exposition", "Couvent Levat",
         "2026-12-16", "18:00", "Découvrez les ateliers des résident·es du Couvent Levat, Belle de Mai.")
+
+    add("Micrographia – concert", "concert", "Friche la Belle de Mai",
+        "2026-11-17", "19:00", "Concert à la Friche la Belle de Mai, à partir de 6 €.")
+    add("Soirée de soutien à la salle Gueule – Orsini, La Casa Fantom, Monastr, Leonard Kotik",
+        "concert", "L'Embobineuse",
+        "2026-11-07", "21:00", "Post-punk, noise et doom crust. 7 € + 2 € adhésion.")
+    add("Concert rock – plateau marseillais", "concert", "Le Molotov",
+        "2026-11-14", "21:00", "Petite salle de la Plaine, programmation alternative (ex-Balthazar).")
+    add("Chanson – scène ouverte", "scène ouverte", "Le Non-Lieu",
+        "2026-11-26", "20:30", "Scène ouverte chanson au Non-Lieu, rue de la Palud.")
 
     return events
 
