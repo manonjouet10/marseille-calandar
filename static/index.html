@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calendrier partagé – Marseille</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <h1>🗓️ Calendrier partagé – Marseille</h1>
+    <div class="identity">
+      <label for="prenom">Ton prénom :</label>
+      <input id="prenom" type="text" placeholder="ex. Manon" autocomplete="off" maxlength="40">
+      <span class="hint">enregistré dans ton navigateur (localStorage)</span>
+    </div>
+  </header>
+
+  <section class="filters" aria-label="Filtres">
+    <select id="filter-type"><option value="">Tous les types</option></select>
+    <select id="filter-venue"><option value="">Tous les lieux</option></select>
+    <label class="bike-filter">
+      🚲 max
+      <input id="filter-bike" type="range" min="0" max="20" step="1" value="20">
+      <span id="filter-bike-val">20 min</span>
+    </label>
+    <button id="filter-reset" type="button">Réinitialiser</button>
+  </section>
+
+  <main>
+    <section class="calendar-panel">
+      <div class="month-nav">
+        <button id="prev-month" type="button" aria-label="Mois précédent">‹</button>
+        <h2 id="month-label"></h2>
+        <button id="next-month" type="button" aria-label="Mois suivant">›</button>
+      </div>
+      <div class="weekdays">
+        <span>lun</span><span>mar</span><span>mer</span><span>jeu</span><span>ven</span><span>sam</span><span>dim</span>
+      </div>
+      <div class="calendar" id="calendar"></div>
+    </section>
+
+    <section class="list-panel">
+      <h2 id="list-title">Événements du mois</h2>
+      <div id="event-list"></div>
+    </section>
+
+    <section class="add-panel">
+      <h2>Ajouter un événement</h2>
+      <form id="add-form">
+        <input id="f-title" type="text" required maxlength="200" placeholder="Titre de l'événement">
+        <div class="form-row">
+          <select id="f-type" required></select>
+          <select id="f-venue" required></select>
+        </div>
+        <div class="form-row">
+          <input id="f-date" type="date" required>
+          <input id="f-time" type="time" required value="20:30">
+        </div>
+        <textarea id="f-desc" rows="2" maxlength="2000" placeholder="Description (optionnel)"></textarea>
+        <button type="submit">Ajouter l'événement</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
