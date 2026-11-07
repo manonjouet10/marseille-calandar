@@ -474,8 +474,16 @@ def main():
     init_db(conn)
     seed(conn)
     conn.close()
-    server = ThreadingHTTPServer((HOST, PORT), Handler)
-    print(f"Calendrier partagé Marseille disponible sur http://localhost:{PORT}")
+    try:
+        server = ThreadingHTTPServer((HOST, PORT), Handler)
+    except OSError as exc:
+        print(f"Impossible d'écouter sur {HOST}:{PORT} ({exc}).")
+        print("Port déjà utilisé ? Essaie par exemple : PORT=8001 python3 server.py")
+        raise SystemExit(1)
+    host_label = "localhost" if HOST in ("127.0.0.1", "0.0.0.0", "::1") else HOST
+    print(f"Calendrier partagé Marseille disponible sur http://{host_label}:{PORT}")
+    if HOST == "0.0.0.0":
+        print(f"Depuis un autre appareil du même réseau : http://<IP-de-cette-machine>:{PORT}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

@@ -18,6 +18,20 @@ autres (réseau local, petite machine perso, etc.) :
 HOST=0.0.0.0 PORT=8000 python3 server.py
 ```
 
+## Dépannage
+
+Rien ne s'affiche sur http://localhost:8000 ?
+
+- Vérifie que le serveur tourne : le terminal doit afficher
+  « Calendrier partagé Marseille disponible sur http://localhost:8000 ».
+  Sinon, lance `python3 server.py` dans le dossier du projet.
+- Si le terminal affiche une erreur de port déjà utilisé, lance plutôt
+  `PORT=8001 python3 server.py` puis ouvre <http://localhost:8001>.
+- Vérifie que tu es sur la branche `calendrier-marseille` (la branche `main` est vide).
+- Depuis un téléphone ou un autre ordinateur du même Wi-Fi : lance
+  `HOST=0.0.0.0 python3 server.py` sur la machine qui héberge le serveur, puis ouvre
+  `http://<IP-locale-de-cette-machine>:8000` (ex. `http://192.168.1.20:8000`).
+
 La base `data/app.db` est créée automatiquement au premier lancement, puis seedée avec :
 
 - **13 lieux réels** de Marseille, centrés sur le Cours Julien / La Plaine et à moins de
